@@ -93,7 +93,7 @@ func jsonp(w http.ResponseWriter, r *http.Request) {
 			avg := books.GetAvg()
 			if len(books) == 0 {
 				avg = 0.0
-				books = append(books, model.Book{"Null", "Null", "Null", "https:/cheapbook.herokuapp.com/noimage", "Null", 0.0, "Null", "Null"})
+				books = append(books, model.Book{"Null", "Null", "Null", "https://cheapbook.herokuapp.com/noimage", "Null", 0.0, "Null", "Null"})
 			}
 			res := model.Result{
 				Books: books,
