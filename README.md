@@ -1,2 +1,2 @@
 # cheapbook
-scrape books from web
+enter the barcode of the book and system will show the cheapest book
