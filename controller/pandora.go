@@ -23,13 +23,13 @@ func Pandora(books *model.Books, s string) {
 	} else {
 		s = strings.Replace(s, " ", "+", -1)
 		url = "https://www.pandora.com.tr/Arama/?type=9&kitapadi=&yazaradi=&yayinevi=&isbn="+ s + "&dil=&siteid=&kategori=&sirala=0"
-
+					 // https://www.pandora.com.tr/Arama/?type=9&kitapadi=&yazaradi=&yayinevi=&isbn=9786056978616&dil=&siteid=&kategori=&sirala=0
 	}
 	err := bow.Open(url)
 	if err != nil {
 		log.Println(err)
 	} else {
-		bow.Find(".stoktaVar").Each(func(index int, item *goquery.Selection) {
+		bow.Find(".indirimVar").Each(func(index int, item *goquery.Selection) {
 
 			title := item.Find(".edebiyatIsim strong").Text()
 			author := item.Find(".edebiyatYazar a").Text()
