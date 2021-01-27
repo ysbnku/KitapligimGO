@@ -13,7 +13,7 @@ func Odakitap(books *model.Books, s string) {
 	defer wg.Done()
 	s = strings.Replace(s, " ", "+", -1)
 	bow := surf.NewBrowser()
-	err := bow.Open("https://www.odakitap.com/arama?q=" + s)
+	err := bow.Open("https://www.odakitap.com/arama?q=9786055122652")
 	if err != nil {
 		log.Println("aaaaaaaa")
 	} else {
