@@ -36,7 +36,7 @@ func Pandora(books *model.Books, s string) {
 
 			pub := item.Find(".edebiyatYayinEvi").Text()
 
-			img, _ := item.Find(".posRel .coverWrapper img").Attr("data-src")
+			img, _ := item.Find(".coverWrapper img").Attr("src")
 			price := item.Find(".indirimliFiyat").Text()
 
 			website, _ := item.Find(".edebiyatIsim a").Attr("href")
