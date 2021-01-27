@@ -1,162 +1,54 @@
 package controller
 
 import (
-	"bytes"
-	"encoding/json"
-	"io/ioutil"
 	"log"
-	"net/http"
 	"strconv"
+	"strings"
 
 	"cheapbook/model"
-)
 
-type jData struct {
-	SearchResponse struct {
-		IsFuzzyUsed  bool   `json:"IsFuzzyUsed"`
-		IsWordSearch bool   `json:"IsWordSearch"`
-		SearchTerm   string `json:"SearchTerm"`
-		Products     []struct {
-			Name      string  `json:"Name"`
-			URL       string  `json:"Url"`
-			ImageURL  string  `json:"ImageUrl"`
-			Price     float64 `json:"Price"`
-			OldPrice  float64 `json:"OldPrice"`
-			Discount  float64 `json:"Discount"`
-			StockCode string  `json:"StockCode"`
-			ID        int     `json:"Id"`
-			Persons   struct {
-				Person []struct {
-					ID          int         `json:"Id"`
-					Name        string      `json:"Name"`
-					GroupCode   int         `json:"GroupCode"`
-					Group       string      `json:"Group"`
-					IsDefault   bool        `json:"IsDefault"`
-					Description interface{} `json:"Description"`
-					ImageURL    interface{} `json:"ImageUrl"`
-				} `json:"Person"`
-			} `json:"Persons"`
-			Categories struct {
-				Category []struct {
-					ID     int    `json:"Id"`
-					Level  int    `json:"Level"`
-					Name   string `json:"Name"`
-					Parent int    `json:"Parent"`
-				} `json:"Category"`
-			} `json:"Categories"`
-			MediaType            string      `json:"MediaType"`
-			MediaTypeText        string      `json:"MediaTypeText"`
-			VariationID          string      `json:"VariationId"`
-			SoldCount            int         `json:"SoldCount"`
-			CommentCount         int         `json:"CommentCount"`
-			CreateDate           string      `json:"CreateDate"`
-			ComingDate           string      `json:"ComingDate"`
-			BrandName            interface{} `json:"BrandName"`
-			BrandID              interface{} `json:"BrandId"`
-			Rating               int         `json:"Rating"`
-			LanguageCode         interface{} `json:"LanguageCode"`
-			FirstShipmentDateUtc string      `json:"FirstShipmentDateUtc"`
-			StatusCode           int         `json:"StatusCode"`
-			ProductProductGroups struct {
-				ProductProductGroup []interface{} `json:"ProductProductGroup"`
-			} `json:"ProductProductGroups"`
-			ManufacturerName string `json:"ManufacturerName"`
-			ManufacturerID   int    `json:"ManufacturerId"`
-		} `json:"Products"`
-		HitCount   int `json:"HitCount"`
-		Categories []struct {
-			Level           int         `json:"Level"`
-			ParentID        int         `json:"ParentId"`
-			Seo             string      `json:"Seo"`
-			IsBottom        bool        `json:"IsBottom"`
-			ParentPath      string      `json:"ParentPath"`
-			MetaTitle       interface{} `json:"MetaTitle"`
-			MetaDescription string      `json:"MetaDescription"`
-			MetaKeywords    interface{} `json:"MetaKeywords"`
-			Name            string      `json:"Name"`
-			ID              int         `json:"Id"`
-			DocumentCount   int         `json:"DocumentCount"`
-		} `json:"Categories"`
-		Brands []struct {
-			Name          string `json:"Name"`
-			ID            int    `json:"Id"`
-			DocumentCount int    `json:"DocumentCount"`
-		} `json:"Brands"`
-		MediaTypes []struct {
-			Name          string `json:"Name"`
-			ID            int    `json:"Id"`
-			DocumentCount int    `json:"DocumentCount"`
-		} `json:"MediaTypes"`
-		Prices []struct {
-			From          float64 `json:"From"`
-			To            int     `json:"To"`
-			Name          string  `json:"Name"`
-			ID            int     `json:"Id"`
-			DocumentCount int     `json:"DocumentCount"`
-		} `json:"Prices"`
-		Writers        interface{}   `json:"Writers"`
-		PropertyValues []interface{} `json:"PropertyValues"`
-		Languages      []interface{} `json:"Languages"`
-	} `json:"searchResponse"`
-}
+	"github.com/PuerkitoBio/goquery"
+	"gopkg.in/headzoo/surf.v1"
+)
 
 func Idefix(books *model.Books, s string) {
 	defer wg.Done()
-	uri := `http://www.idefix.com/ApiCatalog/Search/`
+	bow := surf.NewBrowser()
+	url := ""
+	if _, err := strconv.ParseInt(s, 10, 64); err == nil {
+		url = "https://www.idefix.com/search/?Q=" + s + "&ShowNotForSale=True"
 
-	jsonStr := []byte(`{"content":{"maxPrice":-1.0,"minPrice":-1.0,"page":1,"size":999,"sortfield":"relevance","sortorder":"desc","term":"` + s + `"},"reponseType":0}`)
+	} else {
+		s = strings.Replace(s, " ", "+", -1)
+		url = "https://www.idefix.com/search/?Q=" + s + "&ShowNotForSale=True"
 
-	client := &http.Client{}
-	req, err := http.NewRequest("POST", uri, bytes.NewBuffer(jsonStr))
-	LogErr(err)
+	}
+	err := bow.Open(url)
+	if err != nil {
+		log.Println(err)
+	} else {
+		bow.Find(".cart-product-box-view").Each(func(index int, item *goquery.Selection) {
 
-	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("User-Agent", "okhttp/2.5.0")
+			title := item.Find(".box-title a").Text()
+			author := item.Find(".pName a").Text()
+			pub := item.Find(".manufacturerName a").Text()
+			img, _ := item.Find(".image-area img").Attr("src")
+			price := item.Find("#prices").Text()
+			website, _ := item.Find(".box-title a").Attr("href")
 
-	resp, err := client.Do(req)
-	LogErr(err)
-
-	defer resp.Body.Close()
-	jsonData, err := ioutil.ReadAll(resp.Body)
-	LogErr(err)
-
-	var str jData
-	LogErr(json.Unmarshal(jsonData, &str))
-	for _, v := range str.SearchResponse.Products {
-		for _, c := range v.Categories.Category {
-			if c.ID == 11693 {
-				title := v.Name
-				var author string
-				for _, p := range v.Persons.Person {
-					if p.GroupCode == 1 {
-						author = p.Name
-					}
-				}
-
-				pub := v.ManufacturerName
-				img := "http://i.dr.com.tr" + v.ImageURL
-				priceFloat := v.Price
-				website := "http://www.idefix.com" + v.URL
+			if title != "" && price != "" {
 				p := model.Book{
 					Title:      title,
 					Author:     author,
 					Publisher:  pub,
-					Img:        img,
-					Price:      strconv.FormatFloat(priceFloat, 'f', 6, 64),
-					PriceFloat: priceFloat,
-					WebSite:    website,
+					Img:        "http://www.dr.com.tr" + img,
+					Price:      price,
+					PriceFloat: 0.0,
+					WebSite:    "http://www.dr.com.tr" + website,
 					Resource:   "Idefix",
 				}
 				model.Add(&p, books)
 			}
-		}
-
-	}
-
-}
-
-func LogErr(err error) {
-	if err != nil {
-		log.Println(err)
+		})
 	}
 }
