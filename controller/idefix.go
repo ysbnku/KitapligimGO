@@ -32,7 +32,7 @@ func Idefix(books *model.Books, s string) {
 			title := item.Find(".box-title a").Text()
 			author := item.Find(".pName a").Text()
 			pub := item.Find(".manufacturerName a").Text()
-			img, _ := item.Find(".showZoomable").Attr("src")
+			img, _ := item.Find(".lazyloaded").Attr("src")
 			price := item.Find("#prices").Text()
 			website, _ := item.Find(".box-title a").Attr("href")
 
