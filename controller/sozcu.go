@@ -19,8 +19,8 @@ func Sozcu(books *model.Books, s string) {
 		log.Println(err)
 	} else {
 		bow.Find(".main_content").Each(func(i int, item *goquery.Selection) {
-			title := "qasdasd"
-			author := item.Find(".prd_view_writer span").Text()
+			title := item.Find(".contentHeader").Text()
+			author := item.Find(".prd_brand_box .writer span").Text()
 			pub := item.Find(".publisher a").Text()
 			img, _ := item.Find("#main_img").Attr("src")
 			price := item.Find("#prd_final_price_display").Text()
