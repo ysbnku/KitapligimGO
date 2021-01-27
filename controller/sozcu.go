@@ -2,7 +2,6 @@ package controller
 
 import (
 	"log"
-	"strconv"
 	"strings"
 
 	"cheapbook/model"
@@ -18,14 +17,14 @@ func Sozcu(books *model.Books, s string) {
 	err := bow.Open("https://www.sozcukitabevi.com/index.php?p=Products&q_field_active=0&q=" + s + "&ctg_id=&search_x=0&search_y=0&q_field=&sort_type=prs_monthly-desc&stock=1")
 	if err != nil {
 		log.Println(err)
-	} else if _, ok := strconv.ParseFloat(s, 64); ok != nil {
+	} else {
 		bow.Find("..main_content").Each(func(i int, item *goquery.Selection) {
 			title := item.Find(".contentHeader .prdHeader").Text()
 			author := item.Find(".writer a").Text()
 			pub := item.Find(".publisher a").Text()
 			img, _ := item.Find("#main_img img").Attr("src")
 			price := item.Find(".final_price").Text()
-			website, _ := bow.Url().String()
+			website := "www.sozcukitabevi.com"
 
 			if title != "" && price != "" {
 				p := model.Book{
@@ -42,27 +41,28 @@ func Sozcu(books *model.Books, s string) {
 			}
 
 		})
-	} else {
-		item := bow.Find(".main_content")
-		title := item.Find(".contentHeader").Text()
-		author := item.Find(".prd_view_writer span").Text()
-		pub := item.Find(".prd_view_publisher span").Text()
-		img, _ := item.Find("#main_img").Attr("src")
-		price := item.Find("#prd_final_price_display").Text()
-		website := bow.Url().String()
-
-		if title != "" && price != "" {
-			p := model.Book{
-				Title:     title,
-				Author:    author,
-				Publisher: pub,
-				Img:       "https://www.sozcukitabevi.com" + img,
-				Price:     price,
-				WebSite:   website,
-				Resource:  "Sözcü Kitabevi",
-			}
-			model.Add(&p, books)
-		}
-
 	}
+	// else {
+	// 	item := bow.Find(".main_content")
+	// 	title := item.Find(".contentHeader").Text()
+	// 	author := item.Find(".prd_view_writer span").Text()
+	// 	pub := item.Find(".prd_view_publisher span").Text()
+	// 	img, _ := item.Find("#main_img").Attr("src")
+	// 	price := item.Find("#prd_final_price_display").Text()
+	// 	website := bow.Url().String()
+
+	// 	if title != "" && price != "" {
+	// 		p := model.Book{
+	// 			Title:     title,
+	// 			Author:    author,
+	// 			Publisher: pub,
+	// 			Img:       "https://www.sozcukitabevi.com" + img,
+	// 			Price:     price,
+	// 			WebSite:   website,
+	// 			Resource:  "Sözcü Kitabevi",
+	// 		}
+	// 		model.Add(&p, books)
+	// 	}
+
+	// }
 }
