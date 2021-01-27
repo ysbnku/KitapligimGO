@@ -5,8 +5,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/PuerkitoBio/goquery"
 	"cheapbook/model"
+
+	"github.com/PuerkitoBio/goquery"
 	"gopkg.in/headzoo/surf.v1"
 )
 
@@ -14,17 +15,17 @@ func Odakitap(books *model.Books, s string) {
 	defer wg.Done()
 	s = strings.Replace(s, " ", "+", -1)
 	bow := surf.NewBrowser()
-	err := bow.Open("https://www.odakitap.com/index.php?p=Products&q=" + s)
+	err := bow.Open("https://www.odakitap.com/arama?q=" + s)
 	if err != nil {
 		log.Println(err)
 	} else if _, ok := strconv.ParseFloat(s, 64); ok != nil {
-		bow.Find(".liste-item").Each(func(i int, item *goquery.Selection) {
-			title := item.Find(".l-name a").Text()
-			author := item.Find(".l-owner a").Text()
-			pub := item.Find(".l-company a").Text()
-			img, _ := item.Find(".liste-photo").Attr("src")
-			price := item.Find(".l-price").Text()
-			website, _ := item.Find(".liste-photo-wrapper a").Attr("href")
+		bow.Find(".plist-item").Each(func(i int, item *goquery.Selection) {
+			title := item.Find(".plist-info h2").Text()
+			author := item.Find(".l-owner h3").Text()
+			pub := item.Find(".l-owner h4").Text()
+			img, _ := item.Find(".plist-image-wrapper img").Attr("src")
+			price := item.Find(".new-price").Text()
+			website, _ := item.Find(".plist-image-wrapper a").Attr("href")
 
 			if title != "" && price != "" {
 				p := model.Book{
@@ -34,7 +35,7 @@ func Odakitap(books *model.Books, s string) {
 					Img:        "https://www.odakitap.com" + img,
 					Price:      price,
 					PriceFloat: 0.0,
-					WebSite:    website,
+					WebSite:    "https://www.odakitap.com" + website,
 					Resource:   "Odakitap",
 				}
 				model.Add(&p, books)
