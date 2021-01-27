@@ -5,8 +5,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/PuerkitoBio/goquery"
 	"cheapbook/model"
+
+	"github.com/PuerkitoBio/goquery"
 	"gopkg.in/headzoo/surf.v1"
 )
 
@@ -18,15 +19,13 @@ func Sozcu(books *model.Books, s string) {
 	if err != nil {
 		log.Println(err)
 	} else if _, ok := strconv.ParseFloat(s, 64); ok != nil {
-		main := bow.Find("main")
-		main.Find(".items_col").Each(func(i int, item *goquery.Selection) {
-			tw := item.Find(".name a")
-			title := tw.Text()
+		bow.Find("..main_content").Each(func(i int, item *goquery.Selection) {
+			title := item.Find(".contentHeader .prdHeader").Text()
 			author := item.Find(".writer a").Text()
 			pub := item.Find(".publisher a").Text()
-			img, _ := item.Find(".prd_img").Attr("src")
+			img, _ := item.Find("#main_img img").Attr("src")
 			price := item.Find(".final_price").Text()
-			website, _ := tw.Attr("href")
+			website, _ := bow.Url().String()
 
 			if title != "" && price != "" {
 				p := model.Book{
