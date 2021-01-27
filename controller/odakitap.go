@@ -18,18 +18,12 @@ func Odakitap(books *model.Books, s string) {
 		log.Println(err)
 	} else {
 		bow.Find(".plist-item").Each(func(i int, item *goquery.Selection) {
-			// title := item.Find(".plist-info h2").Text()
-			// author := item.Find(".l-owner h3").Text()
-			// pub := item.Find(".l-owner h4").Text()
-			// img, _ := item.Find(".plist-image-wrapper img").Attr("src")
-			// price := item.Find(".new-price").Text()
-			// website, _ := item.Find(".plist-image-wrapper a").Attr("href")
-			title := "asdasda"
-			author := "asdasdasd"
-			pub := "asdasda"
-			img, _ := "asdadddsd"
-			price := "asdaasdd"
-			website, _ := "assssss"
+			title := item.Find(".plist-info h2").Text()
+			author := item.Find(".l-owner h3").Text()
+			pub := item.Find(".l-owner h4").Text()
+			img, _ := item.Find(".plist-image-wrapper img").Attr("src")
+			price := item.Find(".new-price").Text()
+			website, _ := item.Find(".plist-image-wrapper a").Attr("href")
 
 			if title != "" && price != "" {
 				p := model.Book{
