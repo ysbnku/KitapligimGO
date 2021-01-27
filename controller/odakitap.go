@@ -17,13 +17,13 @@ func Odakitap(books *model.Books, s string) {
 	if err != nil {
 		log.Println(err)
 	} else {
-		bow.Find(".plist-item").Each(func(index int, item *goquery.Selection) {
-			title := "asdad"
-			author := item.Find(".l-owner h3").Text()
-			pub := item.Find(".l-owner h4").Text()
+		bow.Find(".row").Each(func(index int, item *goquery.Selection) {
+			title := item.Find(".plist-info h2 a").Text()
+			author := item.Find("h3.author a").Text()
+			pub := item.Find(".h4.store a").Text()
 			img, _ := item.Find(".plist-image-wrapper img").Attr("src")
 			price := item.Find(".new-price").Text()
-			website, _ := item.Find(".plist-image-wrapper a").Attr("href")
+			website, _ := item.Find(".plist-info h2 a").Attr("href")
 
 			p := model.Book{
 				Title:      title,
