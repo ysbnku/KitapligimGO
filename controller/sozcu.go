@@ -22,7 +22,7 @@ func Sozcu(books *model.Books, s string) {
 			title := "qasdasd"
 			author := item.Find(".prd_view_writer span").Text()
 			pub := item.Find(".publisher a").Text()
-			img, _ := item.Find("#main_img img").Attr("src")
+			img, _ := item.Find("#main_img").Attr("src")
 			price := item.Find("#prd_final_price_display").Text()
 			website := "www.sozcukitabevi.com"
 
