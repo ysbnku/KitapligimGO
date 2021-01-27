@@ -41,10 +41,10 @@ func Idefix(books *model.Books, s string) {
 					Title:      title,
 					Author:     author,
 					Publisher:  pub,
-					Img:        "http://www.dr.com.tr" + img,
+					Img:        "http://www.idefix.com.tr" + img,
 					Price:      price,
 					PriceFloat: 0.0,
-					WebSite:    "http://www.dr.com.tr" + website,
+					WebSite:    "http://www.idefix.com.tr" + website,
 					Resource:   "Idefix",
 				}
 				model.Add(&p, books)
