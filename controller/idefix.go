@@ -27,7 +27,7 @@ func Idefix(books *model.Books, s string) {
 	if err != nil {
 		log.Println(err)
 	} else {
-		bow.Find(".cart-product-box-view").Each(func(index int, item *goquery.Selection) {
+		bow.Find(".row").Each(func(index int, item *goquery.Selection) {
 
 			title := item.Find(".box-title a").Text()
 			author := item.Find(".pName a").Text()
