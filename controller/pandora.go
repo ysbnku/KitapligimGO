@@ -5,9 +5,9 @@ import (
 	"strconv"
 	"strings"
 
+	"cheapbook/model"
 
 	"github.com/PuerkitoBio/goquery"
-	"cheapbook/model"
 	"gopkg.in/headzoo/surf.v1"
 )
 
@@ -16,14 +16,14 @@ func Pandora(books *model.Books, s string) {
 	bow := surf.NewBrowser()
 	url := ""
 	if _, err := strconv.ParseInt(s, 10, 64); err == nil {
-		url = "https://www.pandora.com.tr/Arama/?type=9&kitapadi=&yazaradi=&yayinevi=&isbn="+ s + "&dil=&siteid=&kategori=&sirala=0"
+		url = "https://www.pandora.com.tr/Arama/?type=9&kitapadi=&yazaradi=&yayinevi=&isbn=" + s + "&dil=&siteid=&kategori=&sirala=0"
 
-	//	Old Url
+		//	Old Url
 		//url = "http://www.pandora.com.tr/Arama/?type=9&kitapadi=&yazaradi=&yayinevi=&isbn=" + s + "&resimli=1&dil=0&sirala=0"
 	} else {
 		s = strings.Replace(s, " ", "+", -1)
-		url = "https://www.pandora.com.tr/Arama/?type=9&kitapadi=&yazaradi=&yayinevi=&isbn="+ s + "&dil=&siteid=&kategori=&sirala=0"
-					 // https://www.pandora.com.tr/Arama/?type=9&kitapadi=&yazaradi=&yayinevi=&isbn=9786056978616&dil=&siteid=&kategori=&sirala=0
+		url = "https://www.pandora.com.tr/Arama/?type=9&kitapadi=&yazaradi=&yayinevi=&isbn=" + s + "&dil=&siteid=&kategori=&sirala=0"
+		// https://www.pandora.com.tr/Arama/?type=9&kitapadi=&yazaradi=&yayinevi=&isbn=9786056978616&dil=&siteid=&kategori=&sirala=0
 	}
 	err := bow.Open(url)
 	if err != nil {
@@ -36,8 +36,7 @@ func Pandora(books *model.Books, s string) {
 
 			pub := item.Find(".edebiyatYayinEvi").Text()
 
-			img, _ := item.Find(".posRel img").Attr("data-src")
-
+			img, _ := item.Find(".posRel .coverWrapper img").Attr("data-src")
 			price := item.Find(".indirimliFiyat").Text()
 
 			website, _ := item.Find(".edebiyatIsim a").Attr("href")
@@ -60,9 +59,8 @@ func Pandora(books *model.Books, s string) {
 
 func substring(c string) string {
 
-
-	    runes := []rune(c)
-	    price := string(runes[13:len(runes)])
+	runes := []rune(c)
+	price := string(runes[13:len(runes)])
 	return price
 
 }
