@@ -18,12 +18,9 @@ func Pandora(books *model.Books, s string) {
 	if _, err := strconv.ParseInt(s, 10, 64); err == nil {
 		url = "https://www.pandora.com.tr/Arama/?type=9&kitapadi=&yazaradi=&yayinevi=&isbn=" + s + "&dil=&siteid=&kategori=&sirala=0"
 
-		//	Old Url
-		//url = "http://www.pandora.com.tr/Arama/?type=9&kitapadi=&yazaradi=&yayinevi=&isbn=" + s + "&resimli=1&dil=0&sirala=0"
 	} else {
 		s = strings.Replace(s, " ", "+", -1)
 		url = "https://www.pandora.com.tr/Arama/?type=9&kitapadi=&yazaradi=&yayinevi=&isbn=" + s + "&dil=&siteid=&kategori=&sirala=0"
-		// https://www.pandora.com.tr/Arama/?type=9&kitapadi=&yazaradi=&yayinevi=&isbn=9786056978616&dil=&siteid=&kategori=&sirala=0
 	}
 	err := bow.Open(url)
 	if err != nil {
