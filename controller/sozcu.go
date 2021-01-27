@@ -42,27 +42,4 @@ func Sozcu(books *model.Books, s string) {
 
 		})
 	}
-	// else {
-	// 	item := bow.Find(".main_content")
-	// 	title := item.Find(".contentHeader").Text()
-	// 	author := item.Find(".prd_view_writer span").Text()
-	// 	pub := item.Find(".prd_view_publisher span").Text()
-	// 	img, _ := item.Find("#main_img").Attr("src")
-	// 	price := item.Find("#prd_final_price_display").Text()
-	// 	website := bow.Url().String()
-
-	// 	if title != "" && price != "" {
-	// 		p := model.Book{
-	// 			Title:     title,
-	// 			Author:    author,
-	// 			Publisher: pub,
-	// 			Img:       "https://www.sozcukitabevi.com" + img,
-	// 			Price:     price,
-	// 			WebSite:   website,
-	// 			Resource:  "Sözcü Kitabevi",
-	// 		}
-	// 		model.Add(&p, books)
-	// 	}
-
-	// }
 }
