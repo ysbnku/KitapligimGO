@@ -15,14 +15,14 @@ func Odakitap(books *model.Books, s string) {
 	bow := surf.NewBrowser()
 	err := bow.Open("https://www.odakitap.com/arama?q=" + s)
 	if err != nil {
-		log.Println(err)
+		log.Println("aaaaaaaa")
 	} else {
 		bow.Find(".row").Each(func(index int, item *goquery.Selection) {
-			title := item.Find(".plist-info h2 a").Text()
-			author := item.Find("h3.author a").Text()
-			pub := item.Find(".h4.store a").Text()
+			title := "kitap"
+			author := "kitapcııı"
+			pub := "kitaplaaaar"
 			img, _ := item.Find(".plist-image-wrapper img").Attr("src")
-			price := item.Find(".new-price").Text()
+			price := "aaaaaaaa"
 			website, _ := item.Find(".plist-info h2 a").Attr("href")
 
 			p := model.Book{
