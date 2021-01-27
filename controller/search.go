@@ -11,7 +11,7 @@ var wg sync.WaitGroup
 func Search(books *model.Books, s string) *model.Books {
 	wg.Add(2)
 	// go Idefix(books, s)
-	// go Odakitap(books, s)
+	go Odakitap(books, s)
 	go Pandora(books, s)
 	// go Hepsiburada(books, s)
 	// go Sozcu(books, s)
