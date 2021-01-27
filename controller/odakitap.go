@@ -18,7 +18,7 @@ func Odakitap(books *model.Books, s string) {
 		log.Println(err)
 	} else {
 		bow.Find(".plist-item").Each(func(index int, item *goquery.Selection) {
-			title := item.Find(".plist-info h2").Text()
+			title := "asdad"
 			author := item.Find(".l-owner h3").Text()
 			pub := item.Find(".l-owner h4").Text()
 			img, _ := item.Find(".plist-image-wrapper img").Attr("src")
