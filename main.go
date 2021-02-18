@@ -89,7 +89,7 @@ func json(w http.ResponseWriter, r *http.Request) {
 			}
 
 			res := model.Result{
-				Books: books,
+				Books: books[0],
 				Avg:   avg,
 			}
 
