@@ -76,10 +76,29 @@ func json(w http.ResponseWriter, r *http.Request) {
 		} else {
 			w.Write([]byte("Keyword must be longer than 3 letters!"))
 		}
-	}else if controller.CheckKey(key) || key == "one" {
-			
+	} else if controller.CheckKey(key) || key == "forlibrary" {
+		k := html.EscapeString(r.FormValue("keyword"))
+		k = re.ReplaceAllString(k, "")
+		if len(k) >= 3 {
+			books := model.Books{}
+			books = *controller.SearchOne(&books, k)
+			avg := books.GetAvg()
+			if len(books) == 0 {
+				avg = 0.0
+				books = append(books, model.Book{"", "", "", "", "", 0.0, "", ""})
+			}
+
+			res := model.Result{
+				Books: books,
+				Avg:   avg,
+			}
+
+			w.Header().Set("Content-Type", "application/json;charset=utf-8")
+			w.Write(res.ToJson())
+		} else {
+			w.Write([]byte("Keyword must be longer than 3 letters!"))
 		}
-	 else {
+	} else {
 		w.Write([]byte("Wrong updated!"))
 	}
 
