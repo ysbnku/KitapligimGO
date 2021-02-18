@@ -76,7 +76,10 @@ func json(w http.ResponseWriter, r *http.Request) {
 		} else {
 			w.Write([]byte("Keyword must be longer than 3 letters!"))
 		}
-	} else {
+	}else if controller.CheckKey(key) || key == "one" {
+			
+		}
+	 else {
 		w.Write([]byte("Wrong updated!"))
 	}
 
