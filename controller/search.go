@@ -7,14 +7,6 @@ import (
 )
 
 var wg sync.WaitGroup
-
-func SearchOne(books *model.Books, s string) *model.Books {
-	wg.Add(1)
-	go Dr(books, s)
-	wg.Wait()
-	return books
-
-}
 func Search(books *model.Books, s string) *model.Books {
 	wg.Add(5)
 	go Idefix(books, s)
