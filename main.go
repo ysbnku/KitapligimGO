@@ -76,7 +76,9 @@ func json(w http.ResponseWriter, r *http.Request) {
 		} else {
 			w.Write([]byte("Keyword must be longer than 3 letters!"))
 		}
-	} 
+	} else {
+		w.Write([]byte("Wrong updated!"))
+	}
 	// else if controller.CheckKey(key) || key == "forlibrary" {
 	// 	k := html.EscapeString(r.FormValue("keyword"))
 	// 	k = re.ReplaceAllString(k, "")
@@ -100,9 +102,7 @@ func json(w http.ResponseWriter, r *http.Request) {
 	// 		w.Write([]byte("Keyword must be longer than 3 letters!"))
 	// 	}
 	// } 
-	else {
-		w.Write([]byte("Wrong updated!"))
-	}
+
 
 }
 
