@@ -41,7 +41,7 @@ func Idefix(books *model.Books, s string) {
 					Title:      title,
 					Author:     author,
 					Publisher:  pub,
-					Img:        "resim" + img,
+					Img:        img,
 					Price:      price,
 					PriceFloat: 0.0,
 					WebSite:    "http://www.idefix.com.tr" + website,
